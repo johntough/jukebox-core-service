@@ -1,0 +1,8 @@
+services:
+  jukebox-core-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: core-service/.env
+    ports:
+      - "3002:3002"

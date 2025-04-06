@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: "jukebox-core-service"
+server:
+  port: 3002
