@@ -6,3 +6,15 @@ services:
     env_file: core-service/.env
     ports:
       - "3002:3002"
+    volumes:
+      - jukebox-authentication-service_sqlite-data:/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  jukebox-authentication-service_sqlite-data:
+    external: true

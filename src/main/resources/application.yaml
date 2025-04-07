@@ -1,5 +1,13 @@
 spring:
   application:
     name: "jukebox-core-service"
+  datasource:
+    url: jdbc:sqlite:/data/db.sqlite
+    driver-class-name: org.sqlite.JDBC
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: false
 server:
   port: 3002
