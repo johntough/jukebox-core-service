@@ -2,7 +2,7 @@ spring:
   application:
     name: "jukebox-core-service"
   datasource:
-    url: jdbc:sqlite:/data/db.sqlite
+    url: jdbc:sqlite:/data/jukebox.sqlite
     driver-class-name: org.sqlite.JDBC
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
