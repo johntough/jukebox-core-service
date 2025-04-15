@@ -6,7 +6,6 @@ import com.tough.jukebox.core.api.SpotifySearchResponse;
 import com.tough.jukebox.core.exception.SpotifyAPIException;
 import com.tough.jukebox.core.exception.UserTokenException;
 import com.tough.jukebox.core.util.SpotifyAccessUtil;
-import org.springframework.http.HttpMethod;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +29,14 @@ public class SearchService {
     }
 
     @Transactional(readOnly = true)
-    public String searchArist(String userId, String query) throws UserTokenException, SpotifyAPIException, JsonProcessingException {
+    public SpotifySearchResponse.Artists.Item searchArist(String userId, String query) throws UserTokenException, SpotifyAPIException, JsonProcessingException {
 
-        String responseBody = spotifyAccessUtil.sendRequest(userId, HttpMethod.GET, SEARCH_URI + query + ARTIST_TYPE_SUFFIX);
+        String responseBody = spotifyAccessUtil.sendGetRequest(userId, SEARCH_URI + query + ARTIST_TYPE_SUFFIX);
         SpotifySearchResponse parsedResponse = objectMapper.readValue(responseBody, SpotifySearchResponse.class);
-        String artistImageUri = parsedResponse.getArtists().getItems().get(0).getImages().get(0).getUrl();
+        SpotifySearchResponse.Artists.Item artist = parsedResponse.getArtists().getItems().get(0);
 
-        LOGGER.info("Search artist result: {}", artistImageUri);
+        LOGGER.info("Artist returned: {}", artist.getName());
 
-        return artistImageUri;
+        return artist;
     }
 }

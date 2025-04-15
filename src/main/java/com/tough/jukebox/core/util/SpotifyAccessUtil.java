@@ -13,6 +13,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
 import java.util.Objects;
 
 @Component
@@ -30,13 +31,27 @@ public class SpotifyAccessUtil {
         this.restTemplate = restTemplate;
     }
 
-    public String sendRequest(String userId, HttpMethod method, String uri) throws UserTokenException, SpotifyAPIException {
-
+    public String sendGetRequest(String userId, String uri) throws UserTokenException, SpotifyAPIException {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + getSpotifyAccessToken(userId));
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<>(headers);
 
+        ResponseEntity<String> response = executeRequest(HttpMethod.GET, uri, request);
+
+        return Objects.requireNonNull(response.getBody(), "Response body is unexpectedly null");
+    }
+
+    public void sendPutRequest(String userId, String uri, Map<String, String> requestBodyMap) throws UserTokenException, SpotifyAPIException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + getSpotifyAccessToken(userId));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, String>> request = new HttpEntity<>(requestBodyMap, headers);
+
+        executeRequest(HttpMethod.PUT, uri, request);
+    }
+
+    private ResponseEntity<String> executeRequest(HttpMethod method, String uri, HttpEntity<?> request) throws SpotifyAPIException, UserTokenException {
         LOGGER.info("Sending request to {}{}", BASE_URI, uri);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -46,11 +61,11 @@ public class SpotifyAccessUtil {
                 new ParameterizedTypeReference<>() {}
         );
 
-        if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
+        if (!response.getStatusCode().is2xxSuccessful()) {
             throw new SpotifyAPIException("Request to: " + uri + " failed. Response code: " + response.getStatusCode());
         }
 
-        return Objects.requireNonNull(response.getBody(), "Response body is unexpectedly null");
+        return response;
     }
 
     private String getSpotifyAccessToken(String userId) throws UserTokenException {

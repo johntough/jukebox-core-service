@@ -1,10 +1,10 @@
 package com.tough.jukebox.core.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.tough.jukebox.core.api.SpotifySearchResponse;
+import com.tough.jukebox.core.api.SpotifyDeviceResponse;
 import com.tough.jukebox.core.exception.SpotifyAPIException;
 import com.tough.jukebox.core.exception.UserTokenException;
-import com.tough.jukebox.core.service.SearchService;
+import com.tough.jukebox.core.service.DeviceService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,32 +13,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class SearchController {
+public class DeviceController {
 
-    private final static Logger LOGGER =  LoggerFactory.getLogger(SearchController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(DeviceController.class);
 
-    private final SearchService searchService;
+    private final DeviceService deviceService;
 
     @Autowired
-    public SearchController(SearchService searchService) {
-        this.searchService = searchService;
+    public DeviceController(DeviceService deviceService) {
+        this.deviceService = deviceService;
     }
 
-    @GetMapping("artist/search")
-    public ResponseEntity<SpotifySearchResponse.Artists.Item> artistSearch(@RequestParam String searchQuery, HttpServletRequest request) {
-        LOGGER.info("/artist/search request received with query parameter: {}", searchQuery);
+    @GetMapping("devices")
+    public ResponseEntity<SpotifyDeviceResponse> getDevices(HttpServletRequest request) {
         try {
-            SpotifySearchResponse.Artists.Item artist = searchService.searchArist(
-                    (String) request.getAttribute("userId"),
-                    searchQuery
-            );
-            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(artist);
+            SpotifyDeviceResponse devices = deviceService.getDevices((String) request.getAttribute("userId"));
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(devices);
         } catch (UserTokenException userTokenException) {
-            LOGGER.error("Unauthorised (401) when searching artists: {}", userTokenException.getMessage());
+            LOGGER.error("Unauthorised (401) when getting devices: {}", userTokenException.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (JsonProcessingException | SpotifyAPIException exception) {
             LOGGER.error("Internal Server Error (500) when getting devices: {}", exception.getMessage());
