@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SearchController {
 
-    private final static Logger LOGGER =  LoggerFactory.getLogger(SearchController.class);
+    private static final Logger LOGGER =  LoggerFactory.getLogger(SearchController.class);
 
     private final SearchService searchService;
 
@@ -30,7 +30,7 @@ public class SearchController {
 
     @GetMapping("artist/search")
     public ResponseEntity<SpotifySearchResponse.Artists.Item> artistSearch(@RequestParam String searchQuery, HttpServletRequest request) {
-        LOGGER.info("/artist/search request received with query parameter: {}", searchQuery);
+        LOGGER.info("/artist/search request received");
         try {
             SpotifySearchResponse.Artists.Item artist = searchService.searchArist(
                     (String) request.getAttribute("userId"),

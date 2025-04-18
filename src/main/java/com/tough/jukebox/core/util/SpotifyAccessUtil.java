@@ -5,8 +5,6 @@ import com.tough.jukebox.core.exception.UserTokenException;
 import com.tough.jukebox.core.model.SpotifyToken;
 import com.tough.jukebox.core.model.User;
 import com.tough.jukebox.core.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -19,7 +17,6 @@ import java.util.Objects;
 @Component
 public class SpotifyAccessUtil {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpotifyAccessUtil.class);
     private static final String BASE_URI = "https://api.spotify.com/v1/";
 
     private final UserRepository userRepository;
@@ -51,8 +48,7 @@ public class SpotifyAccessUtil {
         executeRequest(HttpMethod.PUT, uri, request);
     }
 
-    private ResponseEntity<String> executeRequest(HttpMethod method, String uri, HttpEntity<?> request) throws SpotifyAPIException, UserTokenException {
-        LOGGER.info("Sending request to {}{}", BASE_URI, uri);
+    private ResponseEntity<String> executeRequest(HttpMethod method, String uri, HttpEntity<?> request) throws SpotifyAPIException {
 
         ResponseEntity<String> response = restTemplate.exchange(
                 BASE_URI + uri,

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DeviceController {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(DeviceController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeviceController.class);
 
     private final DeviceService deviceService;
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PlayController {
 
-    private final static Logger LOGGER =  LoggerFactory.getLogger(PlayController.class);
+    private static final Logger LOGGER =  LoggerFactory.getLogger(PlayController.class);
 
     private final PlayService playService;
 
@@ -28,7 +28,7 @@ public class PlayController {
     @GetMapping("artist/play")
     public ResponseEntity<Void> play(@RequestParam String deviceId, @RequestParam String playContextUri, HttpServletRequest request) {
 
-        LOGGER.info("artist/play request received for device: {} with context: {}", deviceId, playContextUri);
+        LOGGER.info("artist/play request received with context: {}", playContextUri);
 
         try {
             playService.executePlayRequest(
@@ -49,7 +49,7 @@ public class PlayController {
     @GetMapping("player/pause")
     public ResponseEntity<Void> play(@RequestParam String deviceId, HttpServletRequest request) {
 
-        LOGGER.info("player/pause request received for device: {}", deviceId);
+        LOGGER.info("player/pause request received");
 
         try {
             playService.executePauseRequest(
