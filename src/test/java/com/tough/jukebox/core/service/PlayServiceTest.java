@@ -30,13 +30,19 @@ class PlayServiceTest {
                 anyMap());
 
         playService.executePlayRequest("test-user-id", "test-device-id", "test-context-uri");
+
+        verify(spotifyAccessUtil, times(1)).sendPutRequest(
+                eq("test-user-id"),
+                eq("me/player/play?deviceId=test-device-id"),
+                anyMap()
+        );
     }
 
     @Test
     void testExecutePlayRequestFailureUserTokenException() throws UserTokenException, SpotifyAPIException {
         doThrow(UserTokenException.class).when(spotifyAccessUtil).sendPutRequest(
-                eq("test-user-id"),
-                eq("me/player/play?deviceId=test-device-id"),
+                anyString(),
+                anyString(),
                 anyMap());
 
         assertThrows(UserTokenException.class, () -> {
@@ -47,8 +53,8 @@ class PlayServiceTest {
     @Test
     void testExecutePlayRequestFailureSpotifyAPIException() throws UserTokenException, SpotifyAPIException {
         doThrow(SpotifyAPIException.class).when(spotifyAccessUtil).sendPutRequest(
-                eq("test-user-id"),
-                eq("me/player/play?deviceId=test-device-id"),
+                anyString(),
+                anyString(),
                 anyMap());
 
         assertThrows(SpotifyAPIException.class, () -> {
@@ -64,13 +70,19 @@ class PlayServiceTest {
                 anyMap());
 
         playService.executePauseRequest("test-user-id", "test-device-id");
+
+        verify(spotifyAccessUtil, times(1)).sendPutRequest(
+                eq("test-user-id"),
+                eq("me/player/pause?deviceId=test-device-id"),
+                anyMap()
+        );
     }
 
     @Test
     void testExecutePauseRequestFailureUserTokenException() throws UserTokenException, SpotifyAPIException {
         doThrow(UserTokenException.class).when(spotifyAccessUtil).sendPutRequest(
-                eq("test-user-id"),
-                eq("me/player/pause?deviceId=test-device-id"),
+                anyString(),
+                anyString(),
                 anyMap());
 
         assertThrows(UserTokenException.class, () -> {
@@ -81,8 +93,8 @@ class PlayServiceTest {
     @Test
     void testExecutePauseRequestFailureSpotifyAPIException() throws UserTokenException, SpotifyAPIException {
         doThrow(SpotifyAPIException.class).when(spotifyAccessUtil).sendPutRequest(
-                eq("test-user-id"),
-                eq("me/player/pause?deviceId=test-device-id"),
+                anyString(),
+                anyString(),
                 anyMap());
 
         assertThrows(SpotifyAPIException.class, () -> {
