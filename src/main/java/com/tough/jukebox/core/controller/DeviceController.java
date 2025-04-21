@@ -29,6 +29,7 @@ public class DeviceController {
 
     @GetMapping("devices")
     public ResponseEntity<SpotifyDeviceResponse> getDevices(HttpServletRequest request) {
+        LOGGER.info("/devices request receive");
         try {
             SpotifyDeviceResponse devices = deviceService.getDevices((String) request.getAttribute("userId"));
             return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(devices);

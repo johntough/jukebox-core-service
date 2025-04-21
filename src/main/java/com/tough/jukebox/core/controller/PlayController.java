@@ -27,8 +27,7 @@ public class PlayController {
 
     @GetMapping("artist/play")
     public ResponseEntity<Void> play(@RequestParam String deviceId, @RequestParam String playContextUri, HttpServletRequest request) {
-
-        LOGGER.info("artist/play request received with context: {}", playContextUri);
+        LOGGER.info("/artist/play request received");
 
         try {
             playService.executePlayRequest(
@@ -47,9 +46,8 @@ public class PlayController {
     }
 
     @GetMapping("player/pause")
-    public ResponseEntity<Void> play(@RequestParam String deviceId, HttpServletRequest request) {
-
-        LOGGER.info("player/pause request received");
+    public ResponseEntity<Void> pause(@RequestParam String deviceId, HttpServletRequest request) {
+        LOGGER.info("/player/pause request received");
 
         try {
             playService.executePauseRequest(
